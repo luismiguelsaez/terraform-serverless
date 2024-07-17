@@ -5,10 +5,6 @@ locals {
   aws_vpc_public_subnet_id = "subnet-0fd906853c4f93bf8"
 }
 
-data "local_file" "ssh_public_key" {
-  filename = pathexpand("~/.ssh/id_rsa.pub")
-}
-
 data "aws_ami" "atlantis" {
   most_recent = true
 
@@ -40,7 +36,7 @@ data "aws_ami" "atlantis" {
 
 resource "aws_key_pair" "atlantis" {
   key_name   = "deployer-key"
-  public_key = data.local_file.ssh_public_key.content
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDl1vz2GLroKGBiQmtHx/lLOotslVExsCMS38MsjB1wO48sNlgQvoZRG+QMqn3TrbaTBC6DPMdKiGae3VPpiTKNQC38GepXfNOH+Sf7Fpv0uwLJu1XVr1KT2oSZzaVvI/xoXUjYOZcYaazwXhqpLOAxdp00B/XmsMLH+9mZZoYE1EvV9I3L1O7tzuAI/Z/PMtvTD8fIWkHhlDI68viBQNWehZAOsjlUG3UVgdnjs6jMuLwI0w5TFuY3y6jhj5eGcCsR++TV96phJgze9Ak4p/rbb7NcwGXUOGgizXI9CRYF6u/kdHZe9yBvChMzIm3/TiQ9XZC8bRi8mHGq9kk27Pf7"
 }
 
 resource "aws_security_group" "atlantis" {
@@ -114,6 +110,10 @@ resource "aws_instance" "atlantis" {
     http_put_response_hop_limit = 2
     http_protocol_ipv6          = "disabled"
     http_tokens                 = "optional"
+  }
+
+  tags = {
+    Name = "${var.env}-atlantis-server"
   }
 
   user_data_replace_on_change = true
