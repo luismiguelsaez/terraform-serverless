@@ -116,6 +116,10 @@ resource "aws_instance" "atlantis" {
     http_tokens                 = "optional"
   }
 
+  tags = {
+    Name = "${var.env}-atlantis-server"
+  }
+
   user_data_replace_on_change = true
   user_data                   = <<-EOF
     #!/usr/bin/env bash
