@@ -5,10 +5,6 @@ locals {
   aws_vpc_public_subnet_id = "subnet-0fd906853c4f93bf8"
 }
 
-data "local_file" "ssh_public_key" {
-  filename = pathexpand("~/.ssh/id_rsa.pub")
-}
-
 data "aws_ami" "atlantis" {
   most_recent = true
 
