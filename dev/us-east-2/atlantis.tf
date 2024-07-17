@@ -59,14 +59,12 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh_everywhere" {
 resource "aws_vpc_security_group_egress_rule" "allow_everywhere" {
   security_group_id = aws_security_group.atlantis.id
   cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 0
-  ip_protocol       = "-1"
-  to_port           = 0
+  ip_protocol       = -1
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_atlantis_admin_everywhere" {
   security_group_id = aws_security_group.atlantis.id
-  cidr_ipv4         = local.aws_vpc_cidr
+  cidr_ipv4         = "0.0.0.0/0"
   from_port         = 4141
   ip_protocol       = "tcp"
   to_port           = 4141
